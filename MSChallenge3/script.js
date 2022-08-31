@@ -9,28 +9,55 @@ function writePassword() {
   passwordText.value = password;
 }
 
+var charsets = {
+  lowerCharset: "abcdefghijklmnopqrstuvwxyz",
+  upperCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  numCharset: "0123456789",
+  specialCharset: "!@#$%^&*()_+-=",
+};
+
 function generatePassword() {
+  var passwordSets = "";
+
   var passwordLength = prompt(
-    "Enter the number of characters you wish the password to have.  Minimum of 8, Maximum of 128"
+    "How many characters would you like your password to be? (8-128)"
   );
-  var lowerLetters = confirm(
+  if (passwordLength < 8 || passwordLength > 128) {
+    passwordLength = false;
+  }
+
+  var lowerCharset = confirm(
     "Would you like lowercase letters in your password?"
   );
-  var upperLetters = confirm(
+  if (lowerCharset) {
+    passwordSets += charsets.lowerCharset;
+  }
+
+  var upperCharset = confirm(
     "Would you also like uppercase letters in your password?"
   );
-  var numbers = confirm("Do you wannt numbers to go with your password?");
-  var special = confirm("Finally, would you like some special characters?");
-  var newPassword = "";
-  for (var i = 0; i <= passwordLength; i++) {
-    var randNum = Math.floor(
-      Math.random() * lowerLetters.length,
-      upperLetters.length,
-      numbers.length,
-      special.length
-    );
-    newPassword += lowerLetters.substring(randNum, randNum + 1);
+  if (upperCharset) {
+    passwordSets += charsets.upperCharset;
   }
+
+  var numCharset = confirm("Do you wannt numbers to go with your password?");
+  if (numCharset) {
+    passwordSets += charsets.numCharset;
+  }
+
+  var specialCharset = confirm(
+    "Finally, would you like some special characters?"
+  );
+  if (specialCharset) {
+    passwordSets += charsets.specialCharset;
+  }
+
+  var newPassword = "";
+  for (let i = 0; i < passwordLength; i++) {
+    newPassword +=
+      passwordSets[Math.floor(Math.random() * passwordSets.length)];
+  }
+  return newPassword;
 }
 
 // Add event listener to generate button
